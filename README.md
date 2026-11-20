@@ -1,124 +1,62 @@
-# Vehicle Fleet & Car Rental Management System (CSE 307)
+# Car Rental & Fleet Management System
 
-**Advanced Java Programming — Comprehensive Laboratory Project**  
-*Department of Computer Science and Engineering, SRM University-AP*  
-*Submitted to: Prof. Gokaramaiah Thota*  
-*Submitted by: Aarush Dubey (AP24110010270) & Sommayadeep (AP24110010181)*
+A Java desktop application for managing a rental fleet. It combines a Swing interface with SQLite persistence and demonstrates core Java programming concepts through vehicle inventory and rental workflows.
 
----
+## Features
 
-## 📁 Submission Package Directory Structure
-This folder is organized in accordance with the official laboratory evaluation requirements:
+- Add, search, update, and delete vehicles through a graphical interface
+- Store vehicle records in a local SQLite database using JDBC and prepared statements
+- Model standard and luxury vehicles with classes, inheritance, interfaces, and polymorphism
+- Demonstrate collections, generics, exception handling, and multithreading
+- Write and read rental agreement data using Java byte streams
+- Build and launch with scripts for macOS, Linux, and Windows
 
-1. **`1_Project_Report/`**
-   - `Car_Rental_Management_System_Project_Report.pdf`: 20-page formal laboratory project report covering all 6 evaluation rubric criteria.
-   - `report.tex`: Complete LaTeX source code.
-2. **`2_Java_Source_Code/`**
-   - `Main.java`: Complete source code covering Units 1 to 5 (410 lines).
-   - `lib/sqlite-jdbc.jar`: Vendored SQLite JDBC driver.
-   - `compile.sh` / `run.sh`: Automated macOS/Linux build and run scripts with auto-compilation.
-   - `compile.bat` / `run.bat`: Windows build and run scripts.
-   - `RUN_COMMANDS.txt`: Execution commands and evaluation guide.
-   - `rentals.db`: Pre-populated SQLite database file.
-   - `rental_agreement.dat`: Binary byte stream persistence file.
-3. **`3_Program_Output_Screenshots/`**
-   - `Program_Output_Screenshots.pdf`: 6-page verification document compiling all terminal and GUI output figures.
-   - `images/`: Individual high-resolution PNG screenshots (01 to 08).
-4. **`4_Java_Certificates/`**
-   - `Java_Certificate_Aarush_Dubey.pdf`: *Advanced Java Concepts* certification (Edureka via Coursera).
-5. **`5_Project_Presentation/`**
-   - Folder reserved for the final presentation slide deck (`.pptx`).
+## Requirements
 
----
+- JDK 8 or newer (JDK 17 or newer recommended)
+- A graphical desktop session to use the Swing interface
 
-## ⚡ Quick Start: Compilation and Execution
+The SQLite JDBC driver is included in `lib/`; no separate database server is needed.
 
-### On macOS / Linux:
-```bash
-# Option A: From inside 2_Java_Source_Code
-cd 2_Java_Source_Code
+## Run
+
+From the repository root on macOS or Linux:
+
+```sh
+chmod +x compile.sh run.sh   # first run only
 ./compile.sh
 ./run.sh
-
-# Option B: From the project root
-./compile.sh
-./run.sh
-
-# Option C: Manual single commands
-javac -cp "lib/sqlite-jdbc.jar" Main.java
-java -cp ".:lib/sqlite-jdbc.jar" Main
 ```
 
-The SQLite JDBC driver is included in `lib/sqlite-jdbc.jar`; no separate SQLite
-installation is required. In VS Code, open this project folder and select
-**Run Car Rental Management System** from the Java launch configurations. On macOS,
-you can also double-click `run.command` (you may need to allow it in Privacy & Security
-the first time).
+On Windows, run these from Command Prompt:
 
-### On Windows (Command Prompt):
-```cmd
-cd 2_Java_Source_Code
+```bat
 compile.bat
 run.bat
 ```
 
----
+The launch scripts use the bundled SQLite driver. `rentals.db` is created or updated in the working project directory as the application runs. In a headless environment, the program uses its terminal diagnostic flow instead of opening the GUI.
 
-## Features & Full CRUD Capabilities
+## Project files
 
-The application includes an interactive desktop GUI supporting full **CRUD** operations linked to the SQLite database (`rentals.db`):
-* **Create (Add Vehicle)**: Enter ID, Model, Category, and Daily Rate, then click **Add Vehicle** to insert the record into SQLite via `PreparedStatement`.
-* **Read (Search ID)**: Enter Vehicle ID and click **Search ID** to locate and auto-populate all car fields.
-* **Update (Update Rate)**: Enter Vehicle ID and new Daily Rate, then click **Update Rate** to update the database tariff via SQL `UPDATE`.
-* **Delete (Delete Vehicle)**: Enter Vehicle ID and click **Delete Vehicle** to remove the record from SQLite and in-memory collections via SQL `DELETE`.
+- [Project report (PDF)](JAVA_PROJECT_REPORT.pdf)
+- [Run commands and setup guide](RUN_COMMANDS.txt)
+- [Java source](Main.java)
+- [SQLite JDBC driver](lib/sqlite-jdbc.jar)
 
----
+## Repository layout
 
-## 5-Unit Breakdown & Viva Explanation
-
-1. **[UNIT 1] Classes, Objects & Inheritance**:
-   - `interface Rentable`: Common display contract.
-   - `abstract class Vehicle`: Abstract base class with `vehicleId`, `modelName`, and abstract method `getVehicleTier()`.
-   - `class RentalCar extends Vehicle`: Subclass using `super()`, `this`, `static int totalFleet`, and `final String AGENCY`. Calculates tariff class using an `if-else` ladder.
-   - `class LuxurySedan extends RentalCar`: Shows **multilevel inheritance** (`Vehicle` -> `RentalCar` -> `LuxurySedan`).
-
-2. **[UNIT 2] Polymorphism & Exception Handling**:
-   - **Compile-Time Polymorphism**: Method overloading (`search(fleetList, int id)` vs `search(fleetList, String model)`).
-   - **Runtime Polymorphism**: Dynamic method dispatch on `Vehicle polyVehicle = new LuxurySedan(...)`.
-   - **Exception Handling**: User-defined checked exception `VehicleNotFoundException`, managed using `try`, `catch`, and `finally`.
-
-3. **[UNIT 3] Multithreading, Byte Streams & Event Handling**:
-   - **Multithreading**:
-     - `FleetMaintenanceThread extends Thread` with `setPriority(Thread.MAX_PRIORITY)`.
-     - `DailyBillingTask implements Runnable` executed in background.
-   - **Inter-Thread Communication**: `FleetDispatchSync` synchronizes threads using `synchronized`, `wait()`, and `notify()`.
-   - **Byte Streams**: `FileOutputStream` writes binary/text rental agreements to `rental_agreement.dat` and `FileInputStream` reads them back.
-   - **Event Handling**: Full CRUD GUI window built with the Delegation Event Model (`ActionListener`).
-
-4. **[UNIT 4] JDBC Database & Collections Framework**:
-   - **JDBC Connectivity**: SQLite database (`rentals.db`) via `lib/sqlite-jdbc.jar`, table creation, and parameterized CRUD operations via `PreparedStatement`.
-   - **Collections**: `ArrayList<RentalCar>` for fleet list, `HashSet<String>` for unique vehicle categories, `HashMap<Integer, RentalCar>` for ID lookups, and traversal via `Iterator`.
-
-5. **[UNIT 5] Generics & Desktop GUI**:
-   - **Generic Class**: `Pair<K, V>` (pairs the most premium vehicle with its daily rental rate).
-   - **Wildcard Method**: `inspectFleet(List<? extends Vehicle> list)`.
-   - **Full CRUD Search & Edit GUI**: A Swing window with inputs for ID, Model, Category, Rate, and buttons for Add, Search, Update, and Delete.
-
----
-
-## How to Run
-
-### macOS / Linux
-```bash
-./compile.sh
-./run.sh
+```text
+.
+├── Main.java                 # Java application and Swing interface
+├── lib/sqlite-jdbc.jar       # Bundled SQLite JDBC driver
+├── rentals.db                # Local SQLite database
+├── compile.sh / compile.bat  # Build scripts
+├── run.sh / run.bat          # Launch scripts
+├── RUN_COMMANDS.txt          # Setup and execution guide
+└── JAVA_PROJECT_REPORT.pdf   # Project report
 ```
 
-### Windows
-```cmd
-compile.bat
-run.bat
-```
-# Car-Rental-System-
-# Car-Rental-System-
-# Car-Rental-System-
+## Academic context
+
+Built as an Advanced Java Programming laboratory project for CSE 307 at SRM University–AP. The code is organized around five units: object-oriented programming, polymorphism and exceptions, threads and byte streams, JDBC and collections, and generics with a Swing GUI.
